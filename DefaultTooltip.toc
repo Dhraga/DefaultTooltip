@@ -1,0 +1,25 @@
+## Interface: 60000
+
+## Author: Lynxium
+
+## Title: DefaultTooltip
+## Notes: A lightweight tooltip that has everything you need.
+## Version: @project-version@
+
+## X-Category: Tooltip
+## X-Localizations: enUS
+## X-Website: http://wow.curseforge.com/addons/lonnytooltip/
+## X-License: MIT.
+
+## SavedVariables: DefaultTooltipDb
+libs\LibStub.lua
+libs\AceLocale-3.0\AceLocale-3.0.xml
+libs\AceDB-3.0\AceDB-3.0.xml
+libs\Libra-27\Libra.xml
+
+loc\enUS.lua
+
+Core.lua
+DragFrame.xml
+Tooltip.lua
+Options.lua

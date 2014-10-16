@@ -1,0 +1,45 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Frame name="DefaultTooltip_DragFrame" parent="UIParent" enableMouse="true" movable="true"  clampedToScreen="true" hidden="true">
+		<Size>
+			<AbsDimension x="120" y="40" />
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER" relativeTo="UIParent">
+				<Offset>
+					<AbsDimension x="0" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Layers>
+			<Layer>
+				<FontString name="$parentPos" font="GameFontHighlight" setAllPoints="true" text="Tooltip" maxLines="1" justifyH="CENTER" />
+			</Layer>
+		</Layers>
+		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" tile="true">
+			<EdgeSize>
+				<AbsValue val="16"/>
+			</EdgeSize>
+			<TileSize>
+				<AbsValue val="16"/>
+			</TileSize>
+		</Backdrop>
+		<Scripts>
+			<OnLoad>
+				self:SetSize(200, 40)
+				self:SetBackdropColor(0, 1, 0, 0.5)
+				self.text = _G[self:GetName().."Pos"]
+				self.UpdatePosition = function(self)
+					local x, y = self:GetLeft(), self:GetBottom()
+					if x and y then
+						self.text:SetText(("Left: %d Bottom: %d"):format(x , y))
+					end
+				end
+			</OnLoad>
+			<OnUpdate>
+				self:UpdatePosition()
+			</OnUpdate>
+		</Scripts>
+	</Frame>
+	
+	<Script file="DragFrame.lua"/>
+</Ui>
