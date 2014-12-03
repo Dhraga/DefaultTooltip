@@ -9,6 +9,7 @@ object.frame = object.frame or CreateFrame("Frame")
 object.addons = object.addons or {}
 object.events = object.events or {}
 object.onUpdates = object.onUpdates or {}
+object.defaults = object.defaults or {}
 
 local function safecall(object, method, ...)
 	if object[method] then
@@ -16,7 +17,21 @@ local function safecall(object, method, ...)
 	end
 end
 
+local function removeDefaults(tbl, defaults)
+	for k, v in pairs(defaults) do
+		if type(v) == "table" then
+			removeDefaults(tbl[k], v)
+			if not next(tbl[k]) then
+				tbl[k] = nil
+			end
+		elseif v == tbl[k] then
+			tbl[k] = nil
+		end
+	end
+end
+
 object.frame:RegisterEvent("ADDON_LOADED")
+object.frame:RegisterEvent("PLAYER_LOGOUT")
 object.frame:SetScript("OnEvent", function(self, event, ...)
 	if event == "ADDON_LOADED" then
 		local addon = object.addons[...]
@@ -27,6 +42,11 @@ object.frame:SetScript("OnEvent", function(self, event, ...)
 				safecall(module, "OnInitialize")
 				module.OnInitialize = nil
 			end
+		end
+	end
+	if event == "PLAYER_LOGOUT" then
+		for tbl, defaults in pairs(object.defaults) do
+			removeDefaults(tbl, defaults)
 		end
 	end
 	for module, eventHandler in pairs(object.events[event]) do
@@ -104,6 +124,27 @@ end
 
 function AddonPrototype:IterateModules()
 	return next, self.modules
+end
+
+local function copyDefaults(src, dst)
+	if not src then return {} end
+	if not dst then dst = {} end
+	for k, v in pairs(src) do
+		if type(v) == "table" then
+			dst[k] = copyDefaults(v, dst[k])
+		elseif type(v) ~= type(dst[k]) then
+			dst[k] = v
+		end
+	end
+	return dst
+end
+
+function AddonPrototype:CreateDB(global, defaults)
+	local db = _G[global]
+	db = copyDefaults(defaults, db)
+	_G[global] = db
+	object.defaults[db] = defaults
+	return db
 end
 
 function ObjectPrototype:RegisterEvent(event, handler)

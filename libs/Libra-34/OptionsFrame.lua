@@ -1,5 +1,5 @@
 local Libra = LibStub("Libra")
-local Type, Version = "OptionsFrame", 3
+local Type, Version = "OptionsFrame", 4
 if Libra:GetModuleVersion(Type) >= Version then return end
 
 Libra.modules[Type] = Libra.modules[Type] or {}
@@ -8,6 +8,8 @@ local Options = Libra.modules[Type]
 
 Options.Prototype = Options.Prototype or CreateFrame("Frame")
 Options.ParentPrototype = Options.ParentPrototype or {}
+Options.controls = Options.controls or {}
+Options.controlData = Options.controlData or {}
 
 local mt = {__index = Options.Prototype}
 local parentMT = {__index = setmetatable(Options.ParentPrototype, {__index = Options.Prototype})}
@@ -149,9 +151,16 @@ local function get(self, key)
 	end
 end
 
-local controls = {}
+local controls = Options.controls
+local controlData = Options.controlData
 
-do
+do	-- CheckButton
+	controlData.CheckButton = {
+		x = -2,
+		y = -16,
+		bottomOffset = 8,
+	}
+	
 	local function onClick(self)
 		local checked = self:GetChecked()
 		PlaySound(checked and "igMainMenuOptionCheckBoxOn" or "igMainMenuOptionCheckBoxOff")
@@ -174,7 +183,13 @@ do
 	end
 end
 
-do
+do	-- ColorButton
+	controlData.ColorButton = {
+		x = 3,
+		y = -21,
+		bottomOffset = 3,
+	}
+	
 	local ColorPickerFrame = ColorPickerFrame
 	
 	local function setColor(self, color)
@@ -263,7 +278,13 @@ do
 	end
 end
 
-do
+do	-- Slider
+	controlData.Slider = {
+		x = 7,
+		y = -27,
+		bottomOffset = -5,
+	}
+	
 	local function onValueChanged(self, value, isUserInput)
 		if isUserInput then
 			set(self, value)
@@ -301,7 +322,13 @@ do
 	end
 end
 
-do
+do	-- Dropdown
+	controlData.Dropdown = {
+		x = -15,
+		y = -32,
+		bottomOffset = 8,
+	}
+	
 	local function getValue(dropdown, property, value)
 		local properties = dropdown.properties
 		local property = properties and properties[property]
@@ -384,40 +411,29 @@ do
 	end
 end
 
-local objectData = {
-	CheckButton = {
-		x = -2,
-		y = -16,
-		bottomOffset = 8,
-	},
-	ColorButton = {
-		x = 3,
-		y = -21,
-		bottomOffset = 3,
-	},
-	Slider = {
-		x = 7,
-		y = -27,
-		bottomOffset = -5,
-	},
-	Dropdown = {
-		x = -15,
-		y = -32,
-		bottomOffset = 8,
-	},
-}
+function Libra:AddControlType(type, constructor, controlData)
+	if Options.controls[type] then
+		error(format("Control type '%s' already exists.", type), 2)
+	end
+	Options.controls[type] = constructor
+	controlData = controlData or {}
+	controlData.x = controlData.x or 0
+	controlData.y = controlData.y or 0
+	controlData.bottomOffset = controlData.bottomOffset or 0
+	Options.controlData[type] = controlData
+end
 
 function Prototype:CreateOptions(options)
 	for i, option in ipairs(options) do
 		local control = controls[option.type](self, option)
-		local data = objectData[option.type]
+		local data = controlData[option.type]
 		if i == 1 then
 			control:SetPoint("TOPLEFT", self.desc, "BOTTOMLEFT", data.x, data.y + 8)
 		elseif option.newColumn then
 			control:SetPoint("TOPLEFT", self.desc, "BOTTOM", data.x - 2, data.y + 8)
 		else
 			local previousOption = options[i - 1]
-			local previousData = objectData[previousOption.type]
+			local previousData = controlData[previousOption.type]
 			control:SetPoint("TOPLEFT", self.controls[i - 1], "BOTTOMLEFT", data.x - previousData.x, data.y + previousData.bottomOffset - (option.padding or 0))
 		end
 		if option.width then

@@ -3,7 +3,6 @@
 	<Script file="Core.lua"/>
 	
 	<Script file="Addon.lua"/>
-	<Script file="UIPanel.lua"/>
 	<Script file="AceDBControls.lua"/>
 	<Script file="Button.lua"/>
 	<Script file="Dropdown.lua"/>
@@ -12,4 +11,6 @@
 	<Script file="ScrollFrame.lua"/>
 	<Script file="Slider.lua"/>
 	<Script file="Templates.lua"/>
+	<Script file="UIPanel.lua"/>
+	<Script file="Utils.lua"/>
 </Ui>

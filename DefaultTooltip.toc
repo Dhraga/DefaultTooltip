@@ -8,14 +8,14 @@
 
 ## X-Category: Tooltip
 ## X-Localizations: enUS
-## X-Website: http://wow.curseforge.com/addons/lonnytooltip/
+## X-Website: http://wow.curseforge.com/addons/defaulttooltip/
 ## X-License: MIT.
 
 ## SavedVariables: DefaultTooltipDb
 libs\LibStub.lua
 libs\AceLocale-3.0\AceLocale-3.0.xml
 libs\AceDB-3.0\AceDB-3.0.xml
-libs\Libra-27\Libra.xml
+libs\Libra-34\Libra.xml
 
 loc\enUS.lua
 

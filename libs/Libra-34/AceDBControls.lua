@@ -1,5 +1,5 @@
 ﻿local Libra = LibStub("Libra")
-local Type, Version = "AceDBControls", 2
+local Type, Version = "AceDBControls", 4
 if Libra:GetModuleVersion(Type) >= Version then return end
 
 Libra.modules[Type] = Libra.modules[Type] or {}
@@ -142,7 +142,7 @@ local function getProfiles(db, common, nocurrent)
 end
 
 local function dropdownOnClick(self, profile, func)
-	func(self.owner.db, profile)
+	func(self.owner.db, profile, self.owner)
 end
 
 local function initializeDropdown(self, level, menuList)
@@ -204,6 +204,11 @@ local function enableDualProfileOnClick(self)
 	local checked = self:GetChecked()
 	self.db:SetDualSpecEnabled(checked)
 	self.dualProfile:SetEnabled(checked)
+end
+
+local function dualProfileOnClick(db, profile, frame)
+	db:SetDualSpecProfile(profile)
+	frame:SetText(profile)
 end
 
 local function deleteProfile(db, profile)
@@ -289,7 +294,7 @@ local function constructor(self, db, parent)
 			dualProfile:SetPoint("TOP", reset, "BOTTOM", 0, -28)
 			dualProfile:SetEnabled(isDualSpecEnabled)
 			dualProfile:SetText(db:GetDualSpecProfile())
-			dualProfile.func = db.SetDualSpecProfile
+			dualProfile.func = dualProfileOnClick
 			dualProfile.getCurrent = db.GetDualSpecProfile
 			dualProfile.common = true
 			objects.dualProfile = dualProfile
@@ -301,6 +306,7 @@ local function constructor(self, db, parent)
 			enabled:SetChecked(isDualSpecEnabled)
 			enabled.tooltipText = L.enable_desc
 			enabled.dualProfile = dualProfile
+			objects.dualEnabled = enabled
 			
 			local text = enabled:CreateFontString(nil, nil, "GameFontHighlight")
 			text:SetPoint("LEFT", enabled, "RIGHT", 0, 1)

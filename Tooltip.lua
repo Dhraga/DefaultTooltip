@@ -32,11 +32,16 @@ local OTHER_UNIT_NAME_FORMAT = "|cffffffff%s|r"
 local PLAYER_BUSY_FORMAT = " |cff00cc00%s|r"
 local ITEM_FORMAT = "Item ID: |cffffffff" 
 
+TOOLTIP_DEBUG = false
+
 local function setPoint(self)
 	local scale = self:GetEffectiveScale()
 	local x, y = GetCursorPosition()
 	self:ClearAllPoints()
 	self:SetPoint("BOTTOMLEFT", UIParent, x / scale + 16, (y / scale - self:GetHeight() - 16))
+	if TOOLTIP_DEBUG then
+		print(format("setPoint:\n self: %s\n scale: %s\n x: %s\n y: %s", self:GetName(), scale, x, y))
+	end
 end
 
 local function getColoredUnitName(color, unit)
@@ -84,6 +89,9 @@ GameTooltip:HookScript("OnUpdate", function(self, elapsed)
 		end
 	end
 	-- Updates the mouse position
+	if TOOLTIP_DEBUG then
+		print(format("OnUpdate:\n GetMouseFocus(): %s\n GetAnchorType(): %s", GetMouseFocus():GetName(), self:GetAnchorType()))
+	end
 	if GetMouseFocus() == WorldFrame and self:GetAnchorType() == "ANCHOR_CURSOR" then
 		setPoint(self)
 	end
@@ -133,6 +141,9 @@ GameTooltip:SetScript("OnEvent", function(self, event, key, state)
 end)
 
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
+	if TOOLTIP_DEBUG then
+		print(format("GameTooltip_SetDefaultAnchor:\n GetMouseFocus(): %s\n tooltip: %s\n parent: %s", GetMouseFocus():GetName(), tooltip:GetName(), parent:GetName()))
+	end
 	if GetMouseFocus() == WorldFrame then	
 		tooltip:SetOwner(parent, "ANCHOR_CURSOR")
 		setPoint(tooltip)
@@ -187,7 +198,7 @@ GameTooltipStatusBar.TextString = text
 
 do	-- "skin" tooltips with a gradient background and make the border black
 	local function skinTooltip(self)
-		self:SetBackdropColor(0.05, 0.05, 0.05, 0.9)
+		self:SetBackdropColor(0.05, 0.05, 0.05, 0.7)
 		self:SetBackdropBorderColor(0.3, 0.3, 0.3, 1)
 	end
 
