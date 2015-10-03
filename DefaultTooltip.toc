@@ -1,8 +1,8 @@
-## Interface: 60000
+## Interface: 60200
 
 ## Author: Lynxium
 
-## Title: DefaultTooltip
+## Title: Default: |cffEAE669Tooltip|r 
 ## Notes: A lightweight tooltip that has everything you need.
 ## Version: @project-version@
 
@@ -13,6 +13,7 @@
 
 ## SavedVariables: DefaultTooltipDb
 libs\LibStub.lua
+libs\CallbackHandler-1.0.lua
 libs\AceLocale-3.0\AceLocale-3.0.xml
 libs\AceDB-3.0\AceDB-3.0.xml
 libs\Libra-34\Libra.xml
