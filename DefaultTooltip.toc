@@ -4,11 +4,11 @@
 
 ## Title: Default: |cffEAE669Tooltip|r 
 ## Notes: A lightweight tooltip that has everything you need.
-## Version: @project-version@
+## Version: 0.1.0-beta+@project-version@
 
 ## X-Category: Tooltip
 ## X-Localizations: enUS
-## X-Website: http://wow.curseforge.com/addons/defaulttooltip/
+## X-Website: https://github.com/lynxium/DefaultTooltip
 ## X-License: MIT.
 
 ## SavedVariables: DefaultTooltipDb
