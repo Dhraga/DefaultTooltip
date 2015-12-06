@@ -16,7 +16,7 @@ libs\LibStub.lua
 libs\CallbackHandler-1.0.lua
 libs\AceLocale-3.0\AceLocale-3.0.xml
 libs\AceDB-3.0\AceDB-3.0.xml
-libs\Libra-34\Libra.xml
+libs\Libra-36\Libra.xml
 
 loc\enUS.lua
 
